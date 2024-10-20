@@ -1,0 +1,118 @@
+swagger: '2.0'
+info:
+  title: Phonebook API
+  description: API for managing contacts in a phonebook.
+  version: 1.0.0
+host: "cloudappdev-midterm-ak-439206.appspot.com"  
+schemes:
+  - https
+  - http
+paths:
+  /contacts:
+    get:
+      summary: Get all contacts
+      operationId: getContacts
+      responses:
+        '200':
+          description: List of contacts
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+    post:
+      summary: Create a new contact
+      operationId: createContact
+      parameters:
+        - in: body
+          name: contact
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              phone:
+                type: string
+      responses:
+        '201':
+          description: Contact created successfully
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+  /contacts/{contact_id}:
+    get:
+      summary: Get a contact by ID
+      operationId: getContact
+      parameters:
+        - in: path
+          name: contact_id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Contact details
+        '404':
+          description: Contact not found
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+    put:
+      summary: Update a contact
+      operationId: updateContact
+      parameters:
+        - in: path
+          name: contact_id
+          type: integer
+          required: true
+        - in: body
+          name: contact
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              phone:
+                type: string
+      responses:
+        '200':
+          description: Contact updated successfully
+        '400':
+          description: Invalid request
+        '404':
+          description: Contact not found
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+    delete:
+      summary: Delete a contact
+      operationId: deleteContact
+      parameters:
+        - in: path
+          name: contact_id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Contact deleted successfully
+        '404':
+          description: Contact not found
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: secret_key
+    in: header

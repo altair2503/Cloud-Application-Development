@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phonebook-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phonebook-app
+  template:
+    metadata:
+      labels:
+        app: phonebook-app
+    spec:
+      containers:
+      - name: phonebook-app
+        image: gcr.io/cloudappdev-midterm-ak-439206/phonebook-app:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phonebook-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: phonebook-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
