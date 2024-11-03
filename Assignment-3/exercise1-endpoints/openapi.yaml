@@ -1,0 +1,22 @@
+swagger: '2.0'
+info:
+  title: Hello World API
+  description: A simple API to say hello
+  version: "1.0.0"
+host: cloudappdevassignment3-ak.appspot.com
+schemes:
+  - https
+paths:
+  /hello:
+    get:
+      operationId: getHelloMessage
+      summary: Returns a hello message
+      responses:
+        200:
+          description: A hello message
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Hello, World!"
