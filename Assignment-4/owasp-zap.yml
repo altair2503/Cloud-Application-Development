@@ -1,0 +1,27 @@
+name: OWASP ZAP
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up OWASP ZAP
+        uses: zaproxy/action-full-scan@v0.1.0
+        with:
+          target: "https://cloudappdev-assignment-4.uc.r.appspot.com"
+          docker_name: "owasp/zap2docker-stable"
+          cmd_options: "-r zap_report.html"
+
+      - name: Upload OWASP ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap_report.html
