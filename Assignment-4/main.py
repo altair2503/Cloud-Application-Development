@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import requests
 
 app = Flask(__name__)
 
@@ -7,6 +6,22 @@ app = Flask(__name__)
 phonebook = {}
 next_contact_id = 1  # Start with ID 1
 
+# Health Check Endpoints
+
+# Liveness check endpoint
+@app.route('/health', methods=['GET'])
+def healthz():
+    # Just returns a 200 OK if the app is alive
+    return jsonify({"status": "ok"}), 200
+
+# Readiness check endpoint
+@app.route('/readiness', methods=['GET'])
+def readiness():
+    # Check if phonebook is empty, which might be a simple readiness check (or use other logic)
+    if len(phonebook) >= 0:  # You could make this check more complex if needed
+        return jsonify({"status": "ready"}), 200
+    else:
+        return jsonify({"status": "not ready"}), 503
 
 # Create a new contact
 @app.route('/contacts', methods=['POST'])
@@ -22,7 +37,6 @@ def create_contact():
     }
     phonebook[next_contact_id] = contact
     next_contact_id += 1  # Increment the ID for the next contact
-
 
     return jsonify(contact), 201
 

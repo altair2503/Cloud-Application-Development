@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phonebook-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phonebook-app
+  template:
+    metadata:
+      labels:
+        app: phonebook-app
+    spec:
+      containers:
+      - name: phonebook-app
+        image: gcr.io/cloudappdev-assignment-4/phonebook-app:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "500m"  # Request 500m CPU for the container
+            memory: "256Mi"  # Request 256Mi memory for the container
+        # Health checks (probes)
+        livenessProbe:
+          httpGet:
+            path: /health  # Adjust the path based on your app's health endpoint
+            port: 8080
+          initialDelaySeconds: 10  # Time to wait before the first probe
+          periodSeconds: 5  # Time between subsequent probes
+          failureThreshold: 3  # Number of consecutive failures before marking the pod as unhealthy
+        
+        readinessProbe:
+          httpGet:
+            path: /readiness  # Adjust the path based on your app's readiness endpoint
+            port: 8080
+          initialDelaySeconds: 5  # Time to wait before starting readiness checks
+          periodSeconds: 5  # Time between subsequent probes
+          failureThreshold: 3  # Number of consecutive failures before stopping traffic to the pod
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phonebook-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: phonebook-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
