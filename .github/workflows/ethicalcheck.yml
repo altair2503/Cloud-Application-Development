@@ -12,7 +12,7 @@ on:
 permissions:
   contents: read
 
-jobs:
+jobs:git
   Trigger_EthicalCheck:
     permissions:
       security-events: write
@@ -34,12 +34,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r Assignment-4/requirements.txt
 
       # Step 4: Run Flask app (ensure it's running before EthicalCheck can access it)
       - name: Run Flask application
         run: |
-          nohup python app.py &
+          nohup python Assignment-4/main.py &
 
       # Step 5: EthicalCheck Free & Automated API Security Testing Service
       - name: EthicalCheck API Security Testing
