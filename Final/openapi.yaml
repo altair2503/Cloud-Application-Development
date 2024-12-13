@@ -1,0 +1,135 @@
+swagger: '2.0'
+info:
+  title: Post Management API
+  description: API for managing posts including creating, retrieving, updating, deleting, and searching posts.
+  version: 1.0.0
+host: "cloud-dev-final-ak.appspot.com"
+schemes:
+  - https
+  - http
+paths:
+  /posts:
+    get:
+      summary: Get all posts for the authenticated user
+      operationId: getUserPosts
+      responses:
+        '200':
+          description: List of user's posts
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+    post:
+      summary: Create a new post
+      operationId: createPost
+      parameters:
+        - in: body
+          name: post
+          required: true
+          schema:
+            type: object
+            properties:
+              tittle:
+                type: string
+              text:
+                type: string
+              category:
+                type: string
+      responses:
+        '201':
+          description: Post created successfully
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized access
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+  /posts/{post_id}:
+    put:
+      summary: Update an existing post
+      operationId: updatePost
+      parameters:
+        - in: path
+          name: post_id
+          type: string
+          required: true
+        - in: body
+          name: post
+          required: true
+          schema:
+            type: object
+            properties:
+              tittle:
+                type: string
+              text:
+                type: string
+              category:
+                type: string
+      responses:
+        '200':
+          description: Post updated successfully
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized access
+        '403':
+          description: Forbidden
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+    delete:
+      summary: Delete a post
+      operationId: deletePost
+      parameters:
+        - in: path
+          name: post_id
+          type: string
+          required: true
+      responses:
+        '200':
+          description: Post deleted successfully
+        '401':
+          description: Unauthorized access
+        '403':
+          description: Forbidden
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+  /posts/search:
+    get:
+      summary: Search posts by tittle or text
+      operationId: searchPosts
+      parameters:
+        - in: query
+          name: query
+          type: string
+          required: true
+      responses:
+        '200':
+          description: List of matching posts
+        '400':
+          description: Invalid request
+        '500':
+          description: Internal server error
+      security:
+        - api_key: []
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Authorization
+    in: header
